@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using APBD_Projekt.Models.DTO_s;
+using APBD_Projekt.Services;
 using Microsoft.EntityFrameworkCore;
-
 namespace APBD_Projekt.Models;
 
 public class Oprogramowanie
@@ -28,14 +29,8 @@ public class Oprogramowanie
     [Required]
     [Precision(10, 2)]
     public double Cena { get; set; }
-    public int? KlientFizycznyID { get; set; }
-    public int? FirmaID { get; set; }
     
-    [ForeignKey(nameof(KlientFizycznyID))]
-    public KlientFizyczny? KlientFizyczny { get; set; }
-    
-    [ForeignKey(nameof(FirmaID))]
-    public Firma? Firma { get; set; }
+    public ICollection<Kontrakt> Kontrakty { get; set; } = new HashSet<Kontrakt>();
 
     public ICollection<Znizka> Znizki { get; set; } = new HashSet<Znizka>();
 }

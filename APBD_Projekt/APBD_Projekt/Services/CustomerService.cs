@@ -99,7 +99,7 @@ public class CustomerService
     
     public async Task<bool> CzyKlientIstnieje(KlientFizycznyDTO klientFizycznyDto)
     {
-        return await _context.KlienciFizyczni.AnyAsync(a => a.PESEL == klientFizycznyDto.PESEL & a.czyUsuniety == false);
+        return await _context.KlienciFizyczni.AnyAsync(a => a.PESEL == klientFizycznyDto.PESEL && a.czyUsuniety == false);
     }
     
     public async Task<bool> CzyKlientIstnieje(int id)

@@ -1,3 +1,4 @@
+using APBD_Projekt;
 using APBD_Projekt.Context;
 using APBD_Projekt.Controllers;
 using APBD_Projekt.Services;
@@ -16,6 +17,13 @@ builder.Services.AddScoped<CustomerController>();
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<CompanyController>();
 builder.Services.AddScoped<CompanyService>();
+builder.Services.AddScoped<KontraktController>();
+builder.Services.AddScoped<KontraktService>();
+builder.Services.AddScoped<PlatnoscController>();
+builder.Services.AddScoped<PlatnoscService>();
+builder.Services.AddScoped<PrzychodController>();
+builder.Services.AddScoped<PrzychodService>();
+builder.Services.AddScoped<ExchangeRateService>();
 
 
 builder.Services.AddDbContext<CustomerDbContext>(opt =>
