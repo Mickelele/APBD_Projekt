@@ -23,6 +23,7 @@ public class CustomerDbContext : DbContext
     public DbSet<Znizka> Znizki { get; set; }
     public DbSet<Kontrakt> Kontrakty { get; set; }
     public DbSet<Platnosc> Platnosci { get; set; }
+    public DbSet<AppUser> Uzytkownicy { get; set; }
 
 
 }

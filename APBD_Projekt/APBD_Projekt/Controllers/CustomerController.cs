@@ -2,6 +2,7 @@
 using System.Threading.Channels;
 using APBD_Projekt.Models.DTO_s;
 using APBD_Projekt.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,6 +61,7 @@ public class CustomerController : ControllerBase
         return Created();
     }
 
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> UsunKlientaFizycznego(int id)
     {
