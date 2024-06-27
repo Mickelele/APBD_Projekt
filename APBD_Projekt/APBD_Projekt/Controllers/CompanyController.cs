@@ -1,5 +1,6 @@
 ﻿using APBD_Projekt.Models.DTO_s;
 using APBD_Projekt.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_Projekt.Controllers;
@@ -15,7 +16,7 @@ public class CompanyController : ControllerBase
         _companyService = companyService;
     }
     
-    
+    [Authorize(Roles = "user,admin")]
     [HttpGet("/PokazFirmy")]
     public async Task<IActionResult> PokazFirmy()
     {
@@ -25,6 +26,7 @@ public class CompanyController : ControllerBase
     }
     
     
+    [Authorize(Roles = "user,admin")]
     [HttpPost("/WstawFirme")]
     public async Task<IActionResult> WstawKlientaFizycznego([FromBody]FirmaDTO firmaDto)
     {
@@ -39,7 +41,7 @@ public class CompanyController : ControllerBase
         return Created();
     }
     
-    
+    [Authorize(Roles = "admin")]
     [HttpPost("/AktualizujDaneFirmy/{id:int}")]
     public async Task<IActionResult> AktualizujDaneFirmy([FromBody]FirmaDTOUpdate firmaDto, int id)
     {

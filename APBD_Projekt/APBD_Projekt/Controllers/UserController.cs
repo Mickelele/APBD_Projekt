@@ -39,6 +39,7 @@ public class UserController : ControllerBase
             Login = model.Login,
             Password = hashedPasswordAndSalt.Item1,
             Salt = hashedPasswordAndSalt.Item2,
+            Rola = model.Rola,
             RefreshToken = SecurityHelpers.GenerateRefreshToken(),
             RefreshTokenExp = DateTime.Now.AddDays(1)
         };
@@ -65,11 +66,19 @@ public class UserController : ControllerBase
         }
 
 
-        Claim[] userclaim = new[]
+        var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, "Michal"),
-            new Claim(ClaimTypes.Role, "user")
+            new Claim(ClaimTypes.Name, user.Login)
         };
+        
+        if (user.Rola == "admin")
+        {
+            claims.Add(new Claim(ClaimTypes.Role, "admin"));
+        }
+        else
+        {
+            claims.Add(new Claim(ClaimTypes.Role, "user"));
+        }
 
         SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("8hTfGvUWfZXNz7Dk5JH7fF3sDq8fJ9x2"));
 
@@ -78,7 +87,7 @@ public class UserController : ControllerBase
         JwtSecurityToken token = new JwtSecurityToken(
             issuer: "https://localhost:5001",
             audience: "https://localhost:5001",
-            claims: userclaim,
+            claims: claims,
             expires: DateTime.Now.AddMinutes(10),
             signingCredentials: creds
         );

@@ -1,10 +1,11 @@
 ﻿using APBD_Projekt.Models.DTO_s;
 using APBD_Projekt.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_Projekt.Controllers;
 
-
+[Authorize(Roles = "user,admin")]
 [ApiController]
 [Route("api/kontrakty")]
 public class KontraktController : ControllerBase

@@ -21,7 +21,7 @@ public class CustomerController : ControllerBase
         _customerService = customerService;
     }
     
-    
+    [Authorize(Roles = "user,admin")]
     [HttpGet]
     public async Task<IActionResult> PokazKlientowFizycznych()
     {
@@ -48,7 +48,7 @@ public class CustomerController : ControllerBase
     }
 
     
-    
+    [Authorize(Roles = "admin")]
     [HttpPost("/AktualizujKlientaFizycznego/{id:int}")]
     public async Task<IActionResult> AktualizujKlientaFizycznego([FromBody] KlientFizycznyDTOUpdate klientFizycznyDto, int id)
     {
