@@ -101,7 +101,9 @@ namespace ProjektTests
                 NrTelefonu = "987654321"
             };
 
-            //await _klientFizycznyService.AktualizujKlientaFizycznego(updateDto);
+            var id = newClient.KlientID;
+
+            await _klientFizycznyService.AktualizujKlientaFizycznego(updateDto, id);
 
             var updatedClient = await _context.KlienciFizyczni.FirstOrDefaultAsync(c => c.KlientID == newClient.KlientID);
             Assert.Equal("Piotr", updatedClient.Imie);

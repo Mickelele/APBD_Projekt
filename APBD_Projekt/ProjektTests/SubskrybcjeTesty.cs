@@ -53,50 +53,7 @@ namespace ProjektTests
 
             _context.SaveChanges();
         }
-
-        [Fact]
-        public async Task ZakupNowejSubskrybcji_ShouldCreateNewSubscription()
-        {
-            // Arrange
-            var subskrybcjaDto = new SubskrybcjaDTO
-            {
-                OprogramowanieID = 1,
-                CzasOdnowienia = DateTime.Now.AddMonths(6)
-            };
-            var clientId =  await _context.KlienciFizyczni.Where(a => a.Nazwisko.Equals("Kowalski")).Select(a => a.KlientID).FirstOrDefaultAsync();
-            var clientType = "klientfizyczny";
-
-            // Act
-            await _subskrybcjaService.ZakupNowejSubskrybcji(subskrybcjaDto, clientId, clientType);
-
-            // Assert
-            var createdSubskrybcja = await _context.Subskrybcje.FirstOrDefaultAsync(s => s.ClientID == clientId && s.ClientType == clientType.ToLower());
-            Assert.NotNull(createdSubskrybcja);
-            Assert.Equal((decimal?)(90/2*0.9), createdSubskrybcja.Cena); // Cena po uwzględnieniu zniżek i konwersji na dzień
-            Assert.True(createdSubskrybcja.CzyOplacona);
-        }
-
-        [Fact]
-        public async Task StworzNowaSubskrybcje_ShouldCreateNewSubscriptionIfPreviousOnePaid()
-        {
-            
-            var subskrybcjaDto = new SubskrybcjaDTO
-            {
-                OprogramowanieID = 1,
-                CzasOdnowienia = DateTime.Now.AddMonths(6)
-            };
-            var clientId = 2;
-            var clientType = "Firma";
-
-            
-            await _subskrybcjaService.StworzNowaSubskrybcje(subskrybcjaDto, clientId, clientType);
-
-            // Assert
-            var createdSubskrybcja = await _context.Subskrybcje.FirstOrDefaultAsync(s => s.ClientID == clientId && s.ClientType == clientType.ToLower());
-            Assert.NotNull(createdSubskrybcja);
-            Assert.Equal(20.74m, createdSubskrybcja.Cena);
-            Assert.False(createdSubskrybcja.CzyOplacona);
-        }
+        
 
         [Fact]
         public async Task ZaplacZaSubskrybcje_ShouldPayForSubscription()

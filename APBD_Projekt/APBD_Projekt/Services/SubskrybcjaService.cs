@@ -49,64 +49,77 @@ public class SubskrybcjaService
 
     }
 
-    public async Task StworzNowaSubskrybcje(SubskrybcjaDTO subskrybcjaDto, int id, string type)
+public async Task StworzNowaSubskrybcje(SubskrybcjaDTO subskrybcjaDto, int id, string type)
+{
+    var ostatniaSubskrybcja = await _context.Subskrybcje
+        .Where(s => s.ClientID == id && s.ClientType.Equals(type.ToLower()))
+        .OrderByDescending(s => s.CzasOdnowienia)
+        .FirstOrDefaultAsync();
+
+    if (ostatniaSubskrybcja != null && ostatniaSubskrybcja.CzyOplacona)
     {
-        var subskrybcja = await _context.Subskrybcje.FirstOrDefaultAsync(s => s.ClientID == id && s.ClientType.Equals(type.ToLower()));
-        if (subskrybcja.CzyOplacona && subskrybcja != null)
+        var cena = await _context.Oprogramowania
+            .Where(o => o.OprogramowanieID == subskrybcjaDto.OprogramowanieID)
+            .Select(o => o.Cena)
+            .FirstAsync();
+
+        decimal znizka = 1;
+        if (await CzyZnizkaKliencka(id, type))
         {
-            
-            var cena = await _context.Oprogramowania
+            znizka -= (decimal)0.05;
+        }
+
+        var nowaSubskrybcja = new Subskrybcja()
+        {
+            ClientID = id,
+            ClientType = type,
+            OprogramowanieID = subskrybcjaDto.OprogramowanieID,
+            Nazwa = await _context.Oprogramowania
                 .Where(o => o.OprogramowanieID == subskrybcjaDto.OprogramowanieID)
-                .Select(o => o.Cena)
-                .FirstAsync();
+                .Select(a => a.Nazwa)
+                .FirstAsync(),
+            CzasOdnowienia = ostatniaSubskrybcja.CzasOdnowienia.AddMonths(3), 
+            Cena = (decimal)cena * ((decimal)90 / 365) * znizka,
+            CzyOplacona = false
+        };
 
-            decimal znizka = 1;
-            if (await CzyZnizkaKliencka(id, type))
-            {
-                znizka -= (decimal)0.05;
-            }
-            
-            var nowaSubskrybcja = new Subskrybcja()
-            {
-                ClientID = id,
-                ClientType = type,
-                OprogramowanieID = subskrybcjaDto.OprogramowanieID,
-                Nazwa = await _context.Oprogramowania.Where(o => o.OprogramowanieID == subskrybcjaDto.OprogramowanieID).Select(a => a.Nazwa).FirstAsync(),
-                CzasOdnowienia = subskrybcjaDto.CzasOdnowienia.AddMonths(3),
-                Cena = (decimal)cena * ((decimal)90/365) * znizka,
-                CzyOplacona = false
-            };
-            
-            await _context.Subskrybcje.AddAsync(nowaSubskrybcja);
-            await _context.SaveChangesAsync();
-        }
-    } 
-    
-    
-    public async Task ZaplacZaSubskrybcje(SubskrybcjaDTOPlatnosc subskrybcjaDtoPlatnosc, int id, string type)
-    {
-        var subskrybcja =
-            await _context.Subskrybcje.FirstAsync(s => s.ClientID == id && s.ClientType.Equals(type.ToLower()) && s.CzyOplacona == false);
-
-        if (subskrybcja.CzasOdnowienia < DateTime.Now)
-        {
-            _context.Subskrybcje.Remove(subskrybcja);
-            await _context.SaveChangesAsync();
-            throw new InvalidDataException("Przekroczono czas platnosci. Subskrybcja zostala anulowana.");
-        }
-
-        if (subskrybcja.Cena == subskrybcjaDtoPlatnosc.Kwota)
-        {
-            subskrybcja.CzyOplacona = true;
-            
-            SubskrybcjaDTO s = new SubskrybcjaDTO();
-            s.OprogramowanieID = subskrybcjaDtoPlatnosc.OprogramowanieID;
-            s.CzasOdnowienia = DateTime.Now;
-            await StworzNowaSubskrybcje(s,id,type);
-        }
-
-        
+        await _context.Subskrybcje.AddAsync(nowaSubskrybcja);
+        await _context.SaveChangesAsync();
     }
+}
+
+public async Task ZaplacZaSubskrybcje(SubskrybcjaDTOPlatnosc subskrybcjaDtoPlatnosc, int id, string type)
+{
+    var subskrybcja =
+        await _context.Subskrybcje.FirstOrDefaultAsync(s => s.ClientID == id && s.ClientType.Equals(type.ToLower()) && s.CzyOplacona == false);
+
+    if (subskrybcja == null)
+    {
+        throw new InvalidDataException("Nie znaleziono subskrypcji do opłacenia.");
+    }
+
+    if (subskrybcja.CzasOdnowienia < DateTime.Now)
+    {
+        _context.Subskrybcje.Remove(subskrybcja);
+        await _context.SaveChangesAsync();
+        throw new InvalidDataException("Przekroczono czas platnosci. Subskrybcja zostala anulowana.");
+    }
+
+    if (subskrybcja.Cena == subskrybcjaDtoPlatnosc.Kwota)
+    {
+        subskrybcja.CzyOplacona = true;
+        await _context.SaveChangesAsync(); 
+
+        SubskrybcjaDTO s = new SubskrybcjaDTO
+        {
+            OprogramowanieID = subskrybcjaDtoPlatnosc.OprogramowanieID,
+            CzasOdnowienia = subskrybcja.CzasOdnowienia
+        };
+
+        await StworzNowaSubskrybcje(s, id, type);
+    }
+}
+
 
 
     public async Task SprawdzCzasOdnowienia(SubskrybcjaDTO subskrybcjaDto)

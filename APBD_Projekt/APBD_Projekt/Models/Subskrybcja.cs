@@ -23,7 +23,7 @@ public class Subskrybcja
     public string? Nazwa { get; set; }
     
 
-    public DateTime? CzasOdnowienia { get; set; }
+    public DateTime CzasOdnowienia { get; set; }
     
 
     [Precision(10,2)]
