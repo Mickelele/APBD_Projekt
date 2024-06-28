@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_Projekt.Controllers;
 
-[Authorize(Roles = "user,admin")]
+[AllowAnonymous]
 [ApiController]
 [Route("api/kontrakty")]
 public class KontraktController : ControllerBase

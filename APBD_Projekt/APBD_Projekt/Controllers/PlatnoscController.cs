@@ -5,24 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_Projekt.Controllers;
 
-[Authorize(Roles = "user,admin")]
+[AllowAnonymous]
 [ApiController]
 [Route("api/platnosci")]
 public class PlatnoscController : ControllerBase
 {
 
     private readonly PlatnoscService _platnoscService;
-    private readonly CustomerService _customerService;
+    private readonly KlientFizycznyService _klientFizycznyService;
     private readonly KontraktService _kontraktService;
-    private readonly CompanyService _companyService;
+    private readonly FirmaService _firmaService;
    
 
-    public PlatnoscController(PlatnoscService platnoscService, CustomerService customerService, KontraktService kontraktService, CompanyService companyService)
+    public PlatnoscController(PlatnoscService platnoscService, KlientFizycznyService klientFizycznyService, KontraktService kontraktService, FirmaService firmaService)
     {
         _platnoscService = platnoscService;
-        _customerService = customerService;
+        _klientFizycznyService = klientFizycznyService;
         _kontraktService = kontraktService;
-        _companyService = companyService;
+        _firmaService = firmaService;
     }
 
     [HttpGet("/PokazPlatnosci")]
@@ -34,14 +34,14 @@ public class PlatnoscController : ControllerBase
     [HttpPost("/DodajPlatnosc")]
     public async Task<IActionResult> DodajPlatnosc([FromBody] PlatnoscDTO platnoscDto)
     {
-        if (!(await _customerService.CzyKlientIstnieje(platnoscDto.KlientID) ||  await _companyService.SprawdzCzyFirmaIstnieje(platnoscDto.KlientID)))
+        if (!(await _klientFizycznyService.CzyKlientIstnieje(platnoscDto.KlientID) ||  await _firmaService.SprawdzCzyFirmaIstnieje(platnoscDto.KlientID)))
         {
             return NotFound($"Klient o id {platnoscDto.KlientID} nie istnieje.");
         }
 
         if (!await _platnoscService.CzyKontraktDanegoKlientaIstnieje(platnoscDto))
         {
-            return NotFound($"Kontrakt o id {platnoscDto.KontraktID} klienta o id {platnoscDto.KlientID} nie istnieje."); 
+            return NotFound($"Kontrakt o id {platnoscDto.KontraktID} klienta lub id {platnoscDto.KlientID} nie istnieje."); 
         }
 
         if (platnoscDto.IleZaplacono <= 0)

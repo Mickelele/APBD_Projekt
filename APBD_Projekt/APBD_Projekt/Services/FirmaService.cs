@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace APBD_Projekt.Services;
 
-public class CompanyService
+public class FirmaService
 {
     private readonly CustomerDbContext _context;
 
-    public CompanyService(CustomerDbContext context)
+    public FirmaService(CustomerDbContext context)
     {
         _context = context;
     }

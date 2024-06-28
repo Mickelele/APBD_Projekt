@@ -17,10 +17,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<CustomerController>();
-builder.Services.AddScoped<CustomerService>();
-builder.Services.AddScoped<CompanyController>();
-builder.Services.AddScoped<CompanyService>();
+builder.Services.AddScoped<KlientFizycznyController>();
+builder.Services.AddScoped<KlientFizycznyService>();
+builder.Services.AddScoped<FirmaController>();
+builder.Services.AddScoped<FirmaService>();
 builder.Services.AddScoped<KontraktController>();
 builder.Services.AddScoped<KontraktService>();
 builder.Services.AddScoped<PlatnoscController>();
@@ -28,6 +28,8 @@ builder.Services.AddScoped<PlatnoscService>();
 builder.Services.AddScoped<PrzychodController>();
 builder.Services.AddScoped<PrzychodService>();
 builder.Services.AddScoped<ExchangeRateService>();
+builder.Services.AddScoped<SubskrybcjaController>();
+builder.Services.AddScoped<SubskrybcjaService>();
 
 builder.Services.AddDbContext<CustomerDbContext>(opt =>
 {

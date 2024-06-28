@@ -1,4 +1,5 @@
 ﻿using APBD_Projekt.Context;
+using APBD_Projekt.Models;
 using APBD_Projekt.Models.DTO_s;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,10 +35,28 @@ public class PrzychodService
 
         var przychod = (decimal)kontrakty.Sum(k => k.Cena);
         
+        List<Subskrybcja> subskrybcje = [];
+        if (przychodDto.OprogramowanieID.HasValue)
+        {
+            subskrybcje = await _context.Subskrybcje.Where(s =>
+                    s.OprogramowanieID == przychodDto.OprogramowanieID && s.CzyOplacona == true)
+                .ToListAsync();
+        }
+        else
+        {
+            subskrybcje = await _context.Subskrybcje
+                .Where(s => s.CzyOplacona == true)
+                .ToListAsync();
+        }
+        
+        
+        przychod += (decimal)subskrybcje.Sum(s => s.Cena);
+        
         if (przychodDto.Waluta != "PLN")
         {
             var kurs = _exchangeRateService.GetExchangeRateAsync(przychodDto.Waluta);
-            przychod /= kurs;
+            przychod = (przychod / kurs) * 100;
+            przychod = Math.Floor(przychod) / 100;
         }
         
         return new PrzychodDTOReturn(przychodDto.Waluta, przychod);
@@ -66,10 +85,28 @@ public class PrzychodService
         
         var przychod = (decimal)kontrakty.Sum(k => k.Cena);
         
+        
+        
+        List<Subskrybcja> subskrybcje = [];
+        if (przychodDto.OprogramowanieID.HasValue)
+        {
+            subskrybcje = await _context.Subskrybcje.Where(s =>
+                    s.OprogramowanieID == przychodDto.OprogramowanieID)
+                .ToListAsync();
+        }
+        else
+        {
+            subskrybcje = await _context.Subskrybcje.ToListAsync();
+        }
+        
+        
+        przychod += (decimal)subskrybcje.Sum(s => s.Cena);
+        
         if (przychodDto.Waluta != "PLN")
         {
             var kurs = _exchangeRateService.GetExchangeRateAsync(przychodDto.Waluta);
-            przychod /= kurs;
+            przychod = (przychod / kurs) * 100;
+            przychod = Math.Floor(przychod) / 100;
         }
         
         return new PrzychodDTOReturn(przychodDto.Waluta, przychod);

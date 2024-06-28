@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace APBD_Projekt.Services;
 
-public class CustomerService
+public class KlientFizycznyService
 {
 
     private readonly CustomerDbContext _context;
 
-    public CustomerService(CustomerDbContext context)
+    public KlientFizycznyService(CustomerDbContext context)
     {
         _context = context;
     }
@@ -19,7 +19,7 @@ public class CustomerService
     
     public async Task<ICollection<KlientFizyczny>> PokazKlientowFizycznych()
     {
-        return await _context.KlienciFizyczni.ToListAsync();
+        return await _context.KlienciFizyczni.Where(a => a.czyUsuniety == false).ToListAsync();
     }
     
     public async Task WstawKlientaFizycznego(KlientFizycznyDTO klientFizycznyDto)
@@ -52,9 +52,9 @@ public class CustomerService
     }
     
     
-    public async Task AktualizujKlientaFizycznego(KlientFizycznyDTOUpdate klientFizycznyDto)
+    public async Task AktualizujKlientaFizycznego(KlientFizycznyDTOUpdate klientFizycznyDto, int id)
     {
-        var client = await _context.KlienciFizyczni.FirstAsync();
+        var client = await _context.KlienciFizyczni.FirstAsync(a => a.KlientID == id);
 
         client.Imie = klientFizycznyDto.Imie;
         client.Nazwisko = klientFizycznyDto.Nazwisko;

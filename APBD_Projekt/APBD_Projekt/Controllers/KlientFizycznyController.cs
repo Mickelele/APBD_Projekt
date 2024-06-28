@@ -8,31 +8,31 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_Projekt.Controllers;
 
-
+[AllowAnonymous]
 [ApiController]
 [Route("api/customers")]
-public class CustomerController : ControllerBase
+public class KlientFizycznyController : ControllerBase
 {
 
-    private readonly CustomerService _customerService;
+    private readonly KlientFizycznyService _klientFizycznyService;
 
-    public CustomerController(CustomerService customerService)
+    public KlientFizycznyController(KlientFizycznyService klientFizycznyService)
     {
-        _customerService = customerService;
+        _klientFizycznyService = klientFizycznyService;
     }
     
-    [Authorize(Roles = "user,admin")]
+
     [HttpGet("/PokazKlientowFizycznych")]
     public async Task<IActionResult> PokazKlientowFizycznych()
     {
-        var result = await _customerService.PokazKlientowFizycznych();
+        var result = await _klientFizycznyService.PokazKlientowFizycznych();
         return Ok(result);
     }
 
     [HttpPost("/WstawKlientaFizycznego")]
     public async Task<IActionResult> WstawKlientaFizycznego([FromBody]KlientFizycznyDTO klientFizycznyDto)
     {
-        var result = await _customerService.SprawdzIstnienieIZaktualizuj(klientFizycznyDto);
+        var result = await _klientFizycznyService.SprawdzIstnienieIZaktualizuj(klientFizycznyDto);
 
         if (result == 1)
         {
@@ -43,34 +43,34 @@ public class CustomerController : ControllerBase
             return Created();
         }
 
-        await _customerService.WstawKlientaFizycznego(klientFizycznyDto);
+        await _klientFizycznyService.WstawKlientaFizycznego(klientFizycznyDto);
         return Created();
     }
 
     
-    [Authorize(Roles = "admin")]
+
     [HttpPost("/AktualizujKlientaFizycznego/{id:int}")]
     public async Task<IActionResult> AktualizujKlientaFizycznego([FromBody] KlientFizycznyDTOUpdate klientFizycznyDto, int id)
     {
-        if (!await _customerService.CzyKlientIstnieje(id))
+        if (!await _klientFizycznyService.CzyKlientIstnieje(id))
         {
             return NotFound($"Użytkownik o ID {id} nie istnieje.");
         }
         
-        await _customerService.AktualizujKlientaFizycznego(klientFizycznyDto);
+        await _klientFizycznyService.AktualizujKlientaFizycznego(klientFizycznyDto, id);
         return Created();
     }
 
-    [Authorize(Roles = "admin")]
+
     [HttpDelete("/UsunKlientaFizycznego/{id:int}")]
     public async Task<IActionResult> UsunKlientaFizycznego(int id)
     {
-        if (!await _customerService.CzyKlientIstnieje(id))
+        if (!await _klientFizycznyService.CzyKlientIstnieje(id))
         {
             return NotFound($"Użytkownik o ID {id} nie istnieje.");
         }
 
-        await _customerService.UsunKlientaFizycznego(id);
+        await _klientFizycznyService.UsunKlientaFizycznego(id);
         return StatusCode(204);
     }
     

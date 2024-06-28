@@ -4,6 +4,7 @@ using APBD_Projekt.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APBD_Projekt.Migrations
 {
     [DbContext(typeof(CustomerDbContext))]
-    partial class CustomerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240628173301_TestsFixed")]
+    partial class TestsFixed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,44 +69,47 @@ namespace APBD_Projekt.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KontraktID"));
 
-                    b.Property<double?>("Cena")
+                    b.Property<double>("Cena")
                         .HasPrecision(10, 2)
                         .HasColumnType("float(10)");
 
-                    b.Property<int?>("ClientID")
+                    b.Property<int>("ClientID")
                         .HasColumnType("int");
 
                     b.Property<string>("ClientType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("CzyAktywna")
+                    b.Property<bool>("CzyAktywna")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("CzyPodpisana")
+                    b.Property<bool>("CzyPodpisana")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("DataWaznosciDo")
+                    b.Property<DateTime>("DataWaznosciDo")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DataWaznosciOd")
+                    b.Property<DateTime>("DataWaznosciOd")
                         .HasColumnType("datetime2");
 
-                    b.Property<double?>("IleZaplacono")
+                    b.Property<double>("IleZaplacono")
                         .HasColumnType("float");
 
                     b.Property<string>("InformacjaOAktualizacjach")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LataWsparcia")
+                    b.Property<int>("LataWsparcia")
                         .HasColumnType("int");
 
                     b.Property<int?>("OprogramowanieID")
                         .HasColumnType("int");
 
                     b.Property<string>("OprogramowanieWersja")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ZnizkaProcent")
+                    b.Property<int>("ZnizkaProcent")
                         .HasColumnType("int");
 
                     b.HasKey("KontraktID");
@@ -205,23 +211,27 @@ namespace APBD_Projekt.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OprogramowanieID"));
 
-                    b.Property<double?>("Cena")
+                    b.Property<double>("Cena")
                         .HasPrecision(10, 2)
                         .HasColumnType("float(10)");
 
                     b.Property<string>("Kategoria")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Nazwa")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Opis")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Wersja")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -232,22 +242,23 @@ namespace APBD_Projekt.Migrations
 
             modelBuilder.Entity("APBD_Projekt.Models.Platnosc", b =>
                 {
-                    b.Property<int?>("PlatnoscID")
+                    b.Property<int>("PlatnoscID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("PlatnoscID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlatnoscID"));
 
-                    b.Property<double?>("IleZaplacono")
+                    b.Property<double>("IleZaplacono")
                         .HasColumnType("float");
 
-                    b.Property<int?>("KlientID")
+                    b.Property<int>("KlientID")
                         .HasColumnType("int");
 
                     b.Property<int?>("KontraktID")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<double?>("PozostaloDoZaplaty")
+                    b.Property<double>("PozostaloDoZaplaty")
                         .HasColumnType("float");
 
                     b.HasKey("PlatnoscID");
@@ -259,32 +270,34 @@ namespace APBD_Projekt.Migrations
 
             modelBuilder.Entity("APBD_Projekt.Models.Subskrybcja", b =>
                 {
-                    b.Property<int?>("SubskrybcjaID")
+                    b.Property<int>("SubskrybcjaID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SubskrybcjaID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubskrybcjaID"));
 
-                    b.Property<decimal?>("Cena")
+                    b.Property<decimal>("Cena")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int?>("ClientID")
+                    b.Property<int>("ClientID")
                         .HasColumnType("int");
 
                     b.Property<string>("ClientType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CzasOdnowienia")
+                    b.Property<DateTime>("CzasOdnowienia")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("CzyOplacona")
                         .HasColumnType("bit");
 
                     b.Property<string>("Nazwa")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OprogramowanieID")
+                    b.Property<int>("OprogramowanieID")
                         .HasColumnType("int");
 
                     b.HasKey("SubskrybcjaID");
@@ -302,13 +315,14 @@ namespace APBD_Projekt.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ZnikaID"));
 
-                    b.Property<DateTime?>("ObowiazujeDo")
+                    b.Property<DateTime>("ObowiazujeDo")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ObowiazujeOd")
+                    b.Property<DateTime>("ObowiazujeOd")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Oferta")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -348,7 +362,9 @@ namespace APBD_Projekt.Migrations
                 {
                     b.HasOne("APBD_Projekt.Models.DTO_s.Kontrakt", "Kontrakt")
                         .WithMany("Platnosci")
-                        .HasForeignKey("KontraktID");
+                        .HasForeignKey("KontraktID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Kontrakt");
                 });
@@ -357,7 +373,9 @@ namespace APBD_Projekt.Migrations
                 {
                     b.HasOne("APBD_Projekt.Models.Oprogramowanie", "Oprogramowanie")
                         .WithMany("Subskrybcje")
-                        .HasForeignKey("OprogramowanieID");
+                        .HasForeignKey("OprogramowanieID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Oprogramowanie");
                 });

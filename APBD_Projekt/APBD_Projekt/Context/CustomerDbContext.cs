@@ -24,6 +24,7 @@ public class CustomerDbContext : DbContext
     public DbSet<Kontrakt> Kontrakty { get; set; }
     public DbSet<Platnosc> Platnosci { get; set; }
     public DbSet<AppUser> Uzytkownicy { get; set; }
+    public DbSet<Subskrybcja> Subskrybcje { get; set; }
 
 
 }

@@ -65,6 +65,12 @@ public class KontraktService
     
     public async Task UsunKontrakt(int id)
     {
+        var platnosci = await _context.Platnosci.Where(p => p.KontraktID == id).ToListAsync();
+        if (platnosci.Count != 0)
+        {
+            _context.RemoveRange(platnosci);
+        }
+        
         var kontrakt = await _context.Kontrakty.FirstAsync(k => k.KontraktID == id);
         _context.Kontrakty.Remove(kontrakt);
         await _context.SaveChangesAsync();
@@ -75,7 +81,7 @@ public class KontraktService
     {
         if (kontraktDto.ClientType.ToLower().Equals("klientfizyczny"))
         {
-           return await _context.KlienciFizyczni.AnyAsync(c => c.KlientID == kontraktDto.ClientID);
+           return await _context.KlienciFizyczni.AnyAsync(c => c.KlientID == kontraktDto.ClientID && c.czyUsuniety == false);
         }
 
         if (kontraktDto.ClientType.ToLower().Equals("firma"))
