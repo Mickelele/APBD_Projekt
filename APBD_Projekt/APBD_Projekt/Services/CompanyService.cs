@@ -22,7 +22,7 @@ public class CompanyService
     }
     
     
-    public async Task WstawKlientaFizycznego(FirmaDTO firmaDto)
+    public async Task WstawFirme(FirmaDTO firmaDto)
     {
         var firma = new Firma()
         {

@@ -28,7 +28,7 @@ public class CompanyController : ControllerBase
     
     [Authorize(Roles = "user,admin")]
     [HttpPost("/WstawFirme")]
-    public async Task<IActionResult> WstawKlientaFizycznego([FromBody]FirmaDTO firmaDto)
+    public async Task<IActionResult> WstawFirme([FromBody]FirmaDTO firmaDto)
     {
 
         if (await _companyService.SprawdzCzyFirmaIstnieje(firmaDto))
@@ -36,7 +36,7 @@ public class CompanyController : ControllerBase
             return NotFound($"Firma o KRS {firmaDto.KRS} juz istnieje.");
         }
 
-        await _companyService.WstawKlientaFizycznego(firmaDto);
+        await _companyService.WstawFirme(firmaDto);
 
         return Created();
     }
