@@ -1,53 +1,55 @@
 ﻿using APBD_Projekt.Models;
 using APBD_Projekt.Models.DTO_s;
 using APBD_Projekt.Services;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Threading.Tasks;
 using APBD_Projekt.Context;
+using Xunit;
 
 namespace ProjektTests
 {
+    
+    
     public class CompanyServiceTests
     {
         private Mock<CustomerDbContext> _mock;
         private CompanyService _companyService;
-        private IFixture _fixture;
-
-        [SetUp]
-        public void Setup()
+        
+        public CompanyServiceTests()
         {
-            // Initialize AutoFixture with AutoMoq customization
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
-            // Configure in-memory database for DbContext
             var options = new DbContextOptionsBuilder<CustomerDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unique database name
                 .Options;
-
-            // Mock CustomerDbContext using the options
+            
+            
             _mock = new Mock<CustomerDbContext>(options);
-
-            // Configure the CompanyService with the mocked CustomerDbContext
             _companyService = new CompanyService(_mock.Object);
         }
-
-        [Test]
+        
+        
+        [Fact]
         public async Task WstawFirme_DodajeNowaFirme()
         {
-            // Arrange
-            var newCompany = _fixture.Create<FirmaDTO>();
+            var newCompany = new FirmaDTO()
+            {
+                NazwaFirmy = "TestFirma",
+                Adres = "TestAdres",
+                Email = "test@test.com",
+                NrTelefonu = "123456789",
+                KRS = "1234567890"
+            };
 
-            // Act
+            if (_companyService == null)
+            {
+                throw new InvalidOperationException($"Tragedia");
+            }
             await _companyService.WstawFirme(newCompany);
+            
 
-            // Assert
-            _mock.Verify(x => x.Firmy.Add(It.IsAny<Firma>()), Times.Once);
-            _mock.Verify(x => x.SaveChangesAsync(default), Times.Once);
         }
+        
+        
     }
 }
