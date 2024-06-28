@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_Projekt.Controllers;
 
-[AllowAnonymous]
+
 [ApiController]
 [Route("api/customers")]
 public class KlientFizycznyController : ControllerBase
@@ -21,7 +21,7 @@ public class KlientFizycznyController : ControllerBase
         _klientFizycznyService = klientFizycznyService;
     }
     
-
+    [Authorize(Roles = "user, admin")]
     [HttpGet("/PokazKlientowFizycznych")]
     public async Task<IActionResult> PokazKlientowFizycznych()
     {
@@ -29,6 +29,8 @@ public class KlientFizycznyController : ControllerBase
         return Ok(result);
     }
 
+    
+    [Authorize(Roles = "user, admin")]
     [HttpPost("/WstawKlientaFizycznego")]
     public async Task<IActionResult> WstawKlientaFizycznego([FromBody]KlientFizycznyDTO klientFizycznyDto)
     {
@@ -48,7 +50,7 @@ public class KlientFizycznyController : ControllerBase
     }
 
     
-
+    [Authorize(Roles = "admin")]
     [HttpPost("/AktualizujKlientaFizycznego/{id:int}")]
     public async Task<IActionResult> AktualizujKlientaFizycznego([FromBody] KlientFizycznyDTOUpdate klientFizycznyDto, int id)
     {
@@ -61,7 +63,7 @@ public class KlientFizycznyController : ControllerBase
         return Created();
     }
 
-
+    [Authorize(Roles = "admin")]
     [HttpDelete("/UsunKlientaFizycznego/{id:int}")]
     public async Task<IActionResult> UsunKlientaFizycznego(int id)
     {

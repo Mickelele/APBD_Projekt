@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_Projekt.Controllers;
 
-[AllowAnonymous]
+
 [ApiController]
 [Route("api/companies")]
 public class FirmaController : ControllerBase
@@ -18,6 +18,7 @@ public class FirmaController : ControllerBase
     }
     
 
+    [Authorize(Roles = "user, admin")]
     [HttpGet("/PokazFirmy")]
     public async Task<IActionResult> PokazFirmy()
     {
@@ -27,7 +28,7 @@ public class FirmaController : ControllerBase
     }
     
     
-
+    [Authorize(Roles = "user, admin")]
     [HttpPost("/WstawFirme")]
     public async Task<IActionResult> WstawFirme([FromBody]FirmaDTO firmaDto)
     {
@@ -42,7 +43,7 @@ public class FirmaController : ControllerBase
         return Created();
     }
     
-
+    [Authorize(Roles = "admin")]
     [HttpPost("/AktualizujDaneFirmy/{id:int}")]
     public async Task<IActionResult> AktualizujDaneFirmy([FromBody]FirmaDTOUpdate firmaDto, int id)
     {

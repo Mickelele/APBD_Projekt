@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_Projekt.Controllers;
 
-[AllowAnonymous]
+[Authorize(Roles = "user, admin")]
 [ApiController]
 [Route("api/subskrybcje")]
 public class SubskrybcjaController : ControllerBase

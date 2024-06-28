@@ -94,14 +94,14 @@ public class KontraktService
     public async Task<bool> CzyKlientNieMaJuzAktywnegoKontrkatu(KontraktDTO kontraktDto)
     {
         
-        return await _context.Kontrakty.AnyAsync(c => c.ClientID == kontraktDto.ClientID && c.ClientType.ToLower().Equals(kontraktDto.ClientType.ToLower()) && c.OprogramowanieID == kontraktDto.OprogramowanieID);
+        return await _context.Kontrakty.AnyAsync(c => c.ClientID == kontraktDto.ClientID && c.ClientType.ToLower().Equals(kontraktDto.ClientType.ToLower()) && c.OprogramowanieID == kontraktDto.OprogramowanieID && c.CzyPodpisana == false);
     }
     
 
     public bool CzyDataMiesciSieWZakresie(KontraktDTO kontraktDto)
     {
         var roznica = kontraktDto.DataWaznosciDo - kontraktDto.DataWaznosciOd;
-        return roznica.TotalDays >= 3 && roznica.TotalDays <= 30 && kontraktDto.LataDodatkowegoWsparcia >= 1 && kontraktDto.LataDodatkowegoWsparcia <= 3;
+        return roznica.TotalDays >= 3 && roznica.TotalDays <= 30 && kontraktDto.LataDodatkowegoWsparcia >= 0 && kontraktDto.LataDodatkowegoWsparcia <= 3;
     }
     
     public bool CzyOplaconaWTerminie(KontraktDTO kontraktDto)
