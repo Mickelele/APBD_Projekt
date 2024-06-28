@@ -29,7 +29,7 @@ public class UserController : ControllerBase
     
     
     [AllowAnonymous]
-    [HttpPost("register")]
+    [HttpPost("/ZarejestrujSie")]
     public IActionResult RegisterStudent(RegisterUser model)
     {
         var hashedPasswordAndSalt = SecurityHelpers.GetHashedPasswordAndSalt(model.Password);
@@ -52,7 +52,7 @@ public class UserController : ControllerBase
     
     
     [AllowAnonymous]
-    [HttpPost("login")]
+    [HttpPost("/ZalogujSie")]
     public IActionResult Login(LoginUser loginRequest)
     {
         AppUser user = _context.Uzytkownicy.Where(u => u.Login == loginRequest.Login).First();

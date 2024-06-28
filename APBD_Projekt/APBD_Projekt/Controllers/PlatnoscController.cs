@@ -25,7 +25,7 @@ public class PlatnoscController : ControllerBase
         _companyService = companyService;
     }
 
-    [HttpGet]
+    [HttpGet("/PokazPlatnosci")]
     public async Task<IActionResult> PokazPlatnosci()
     {
         return Ok(await _platnoscService.PokazPlatnosci());

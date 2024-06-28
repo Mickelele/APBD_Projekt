@@ -19,7 +19,7 @@ public class PrzychodController : ControllerBase
         _przychodService = przychodService;
     }
 
-    [HttpPost("biezacy")]
+    [HttpPost("/PokazBiezacyPrzychod")]
     public async Task<IActionResult> ObliczBiezacyPrzychod([FromBody] PrzychodDTO przychodDto)
     {
         PrzychodDTOReturn przychod = await _przychodService.ObliczBiezacyPrzychod(przychodDto);
@@ -28,7 +28,7 @@ public class PrzychodController : ControllerBase
     }
     
     
-    [HttpPost("przewidywany")]
+    [HttpPost("/PokazPrzewidywanyPrzychod")]
     public async Task<IActionResult> ObliczPrzewidywanyPrzychod([FromBody] PrzychodDTO przychodDto)
     {
         PrzychodDTOReturn przychod = await _przychodService.ObliczPrzewidywanyPrzychod(przychodDto);

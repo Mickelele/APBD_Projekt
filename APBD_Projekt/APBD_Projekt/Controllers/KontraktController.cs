@@ -49,7 +49,7 @@ public class KontraktController : ControllerBase
         return Created();
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("/UsunKontrakt/{id:int}")]
     public async Task<IActionResult> UsunKontrakt(int id)
     {
         if (!await _kontraktService.CzyKontraktIstnieje(id))

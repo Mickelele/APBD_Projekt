@@ -20,7 +20,7 @@ namespace ProjektTests
         public CompanyServiceTests()
         {
             var options = new DbContextOptionsBuilder<CustomerDbContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unique database name
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) 
                 .Options;
             
             
@@ -45,9 +45,10 @@ namespace ProjektTests
             {
                 throw new InvalidOperationException($"Tragedia");
             }
+            
             await _companyService.WstawFirme(newCompany);
             
-
+            
         }
         
         

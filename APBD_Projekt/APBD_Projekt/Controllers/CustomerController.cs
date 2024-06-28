@@ -22,7 +22,7 @@ public class CustomerController : ControllerBase
     }
     
     [Authorize(Roles = "user,admin")]
-    [HttpGet]
+    [HttpGet("/PokazKlientowFizycznych")]
     public async Task<IActionResult> PokazKlientowFizycznych()
     {
         var result = await _customerService.PokazKlientowFizycznych();
@@ -62,7 +62,7 @@ public class CustomerController : ControllerBase
     }
 
     [Authorize(Roles = "admin")]
-    [HttpDelete("{id:int}")]
+    [HttpDelete("/UsunKlientaFizycznego/{id:int}")]
     public async Task<IActionResult> UsunKlientaFizycznego(int id)
     {
         if (!await _customerService.CzyKlientIstnieje(id))
